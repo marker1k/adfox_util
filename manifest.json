@@ -1,0 +1,30 @@
+{
+    "name": "Getting Started Example",
+    "version": "1.0",
+    "description": "Build an Extension!",
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+    "browser_action":
+    {
+        "default_popup": "popup.html",
+        "default_icon":
+        {
+            "128": "img.png"
+        }
+    },
+    "permissions": [
+          "tabs",
+          "background", 
+          "webRequest", 
+          "webRequestBlocking", 
+          "*://*/"
+        ],
+    "icons":
+    {
+        "128": "img.png"
+    },
+    "manifest_version": 2
+}
