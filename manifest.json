@@ -1,7 +1,7 @@
 {
-    "name": "Getting Started Example",
+    "name": "ADFOX utility",
     "version": "1.0",
-    "description": "Build an Extension!",
+    "description": "-_-",
     "background": {
         "scripts": [
             "background.js"
@@ -20,7 +20,8 @@
           "background", 
           "webRequest", 
           "webRequestBlocking", 
-          "*://*/"
+          "*://*/",
+          "storage"
         ],
     "icons":
     {

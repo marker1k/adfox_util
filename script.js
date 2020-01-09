@@ -20,6 +20,23 @@ var abcToInt = function(abc) {
 var isNumeric = function(num) {
     return !isNaN(num);
 }
+var copyClientUrl = function() {
+    chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
+        var str = tabs[0].url;
+        if (str.indexOf("adfox") > -1 && str.indexOf("yandex-team") > -1) {
+            str = str.replace("-team", "");
+        }
+        var el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+    });
+};
 
 
 
@@ -182,3 +199,9 @@ document.querySelector("#abc > input").addEventListener('keyup', function(e) {
     }
 });
 //End
+
+window.onload = function() {
+    document.querySelector("#copyClientUrl").addEventListener("click", function(){
+        copyClientUrl();
+    });
+};
