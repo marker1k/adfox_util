@@ -1,3 +1,21 @@
+var copyClientUrl = function() {
+    chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
+        var str = tabs[0].url;
+        if (str.indexOf("adfox") > -1 && str.indexOf("yandex-team") > -1) {
+            str = str.replace("-team", "");
+        }
+        var el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+    });
+};
+
 chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
         var modUrl;
@@ -9,3 +27,11 @@ chrome.webRequest.onBeforeRequest.addListener(
         return { redirectUrl: modUrl };
     }, { urls: ["*://login.adfox.ru/*", "*://adfox.yandex.ru/*"] },
     ["blocking"]);
+
+chrome.contextMenus.create({
+      title: "Copy Client URL",
+      contexts: ["browser_action"],
+      onclick: function() {
+        copyClientUrl();
+      }
+});

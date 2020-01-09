@@ -21,7 +21,8 @@
           "webRequest", 
           "webRequestBlocking", 
           "*://*/",
-          "storage"
+          "storage",
+          "contextMenus"
         ],
     "icons":
     {
