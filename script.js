@@ -201,7 +201,30 @@ document.querySelector("#abc > input").addEventListener('keyup', function(e) {
 //End
 
 window.onload = function() {
-    document.querySelector("#copyClientUrl").addEventListener("click", function(){
+    document.querySelector("#copyClientUrl").addEventListener("click", function() {
         copyClientUrl();
     });
+    chrome.storage.sync.get("redirect", function(data) {
+        console.log(data.redirect);
+        if (data.redirect) {
+            document.querySelector("#redirect").checked = true;
+        }
+    });
+    document.querySelector("#redirect").onchange = function(event) {
+        if (event.target.checked) {
+            chrome.storage.sync.set({ "redirect": true }, function() {
+                // debug output
+                chrome.storage.sync.get("redirect", function(data) {
+                    console.log(data.redirect);
+                });
+            });
+        } else {
+            chrome.storage.sync.set({ "redirect": false }, function() {
+                // debug output
+                chrome.storage.sync.get("redirect", function(data) {
+                    console.log(data.redirect);
+                });
+            });
+        }
+    }
 };

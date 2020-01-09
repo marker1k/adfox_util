@@ -1,3 +1,8 @@
+var redirectEnabled;
+chrome.storage.sync.get("redirect", function(data) {
+    redirectEnabled = data.redirect;
+});
+
 var copyClientUrl = function() {
     chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
         var str = tabs[0].url;
@@ -18,20 +23,29 @@ var copyClientUrl = function() {
 
 chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
-        var modUrl;
-        if (details.url.indexOf('adfox.yandex.ru') > -1) {
-            modUrl = details.url.replace('adfox.yandex.ru', 'adfox.yandex-team.ru');
-        } else if (details.url.indexOf('login.adfox.ru') > -1) {
-            modUrl = details.url.replace('login.adfox.ru', 'adfox.yandex-team.ru');
+        console.log(redirectEnabled);
+        if (redirectEnabled) {
+            var modUrl;
+            if (details.url.indexOf('adfox.yandex.ru') > -1) {
+                modUrl = details.url.replace('adfox.yandex.ru', 'adfox.yandex-team.ru');
+            } else if (details.url.indexOf('login.adfox.ru') > -1) {
+                modUrl = details.url.replace('login.adfox.ru', 'adfox.yandex-team.ru');
+            }
+            return { redirectUrl: modUrl };
         }
-        return { redirectUrl: modUrl };
     }, { urls: ["*://login.adfox.ru/*", "*://adfox.yandex.ru/*"] },
     ["blocking"]);
 
+chrome.storage.onChanged.addListener(function(changes, area) {
+    if (area == "sync" && "redirect" in changes) {
+        redirectEnabled = changes.redirect.newValue;
+    }
+});
+
 chrome.contextMenus.create({
-      title: "Copy Client URL",
-      contexts: ["browser_action"],
-      onclick: function() {
+    title: "Copy Client URL",
+    contexts: ["browser_action"],
+    onclick: function() {
         copyClientUrl();
-      }
+    }
 });
